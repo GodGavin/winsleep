@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"github.com/go-vgo/robotgo"
 	hook "github.com/robotn/gohook"
 	"syscall"
 )
@@ -24,51 +23,48 @@ func main() {
 
 }
 func deteckeyboard() {
-	for {
-		//sleep := robotgo.AddEvents("s", "command")
-		//if sleep {
-		//	fmt.Println("sleep")
-		//	//sleepDLLImplementation()
-		//}
-		fmt.Println("keyboard detecing")
-		robotgo.EventHook(hook.KeyDown, []string{"command", "s"}, func(e hook.Event) {
-			sleepDLLImplementation()
-			fmt.Println("sleep execued")
-			robotgo.EventEnd()
-		}) //这个实现不阻塞 good!!!
 
-		robotgo.EventHook(hook.KeyDown, []string{"command", "p"}, func(e hook.Event) {
-			hibernateDLLImplementation()
-			fmt.Println("hibernate execued")
-			robotgo.EventEnd()
-		})
+	//sleep := robotgo.AddEvents("s", "command")
+	//if sleep {
+	//	fmt.Println("sleep")
+	//	//sleepDLLImplementation()
+	//}
+	fmt.Println("keyboard detecing")
+	hook.Register(hook.KeyDown, []string{"command", "s"}, func(e hook.Event) {
+		sleepDLLImplementation()
+		fmt.Println("sleep execued")
+	}) //这个实现不阻塞 good!!!
 
-		robotgo.EventHook(hook.KeyDown, []string{"command", "t"}, func(e hook.Event) {
-			timeImplementation()
-			fmt.Println("time execued")
-			robotgo.EventEnd()
-		})
+	hook.Register(hook.KeyDown, []string{"command", "p"}, func(e hook.Event) {
+		hibernateDLLImplementation()
+		fmt.Println("hibernate execued")
+	})
 
-		robotgo.EventHook(hook.KeyDown, []string{"command", "m"}, func(e hook.Event) {
-			timespeakImplementation()
-			fmt.Println("timespeak execued")
-			robotgo.EventEnd()
-		})
+	hook.Register(hook.KeyDown, []string{"command", "t"}, func(e hook.Event) {
+		timeImplementation()
+		fmt.Println("time execued")
+	})
 
-		s := robotgo.EventStart()
-		<-robotgo.EventProcess(s)
-	}
+	hook.Register(hook.KeyDown, []string{"command", "m"}, func(e hook.Event) {
+		timespeakImplementation()
+		fmt.Println("timespeak execued")
+	})
+
+	s := hook.Start()
+
+	<-hook.Process(s)
+
 }
 
-//func deteckeyboard2() {
-//	for {
-//		hibernate := robotgo.AddEvents("p", "command")
-//		if hibernate {
-//			fmt.Println("hibernate")
-//			//sleepDLLImplementation2()
+//	func deteckeyboard2() {
+//		for {
+//			hibernate := robotgo.AddEvents("p", "command")
+//			if hibernate {
+//				fmt.Println("hibernate")
+//				//sleepDLLImplementation2()
+//			}
 //		}
 //	}
-//}
 func sleepDLLImplementation() {
 	var mod = syscall.NewLazyDLL("Powrprof.dll")
 	var proc = mod.NewProc("SetSuspendState")
@@ -100,6 +96,6 @@ func timeImplementation() {
 	ch <- 1
 }
 
-func timespeakImplementation(){
-	chs<-1
+func timespeakImplementation() {
+	chs <- 1
 }
