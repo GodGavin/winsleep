@@ -51,9 +51,9 @@ func deteckeyboard() {
 	})
 
 	s := hook.Start()
-	for {
-		<-hook.Process(s)
-	}
+
+	<-hook.Process(s)
+
 }
 
 //	func deteckeyboard2() {
