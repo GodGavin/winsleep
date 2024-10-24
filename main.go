@@ -23,38 +23,35 @@ func main() {
 
 }
 func deteckeyboard() {
+
+	//sleep := robotgo.AddEvents("s", "command")
+	//if sleep {
+	//	fmt.Println("sleep")
+	//	//sleepDLLImplementation()
+	//}
+	fmt.Println("keyboard detecing")
+	hook.Register(hook.KeyDown, []string{"command", "s"}, func(e hook.Event) {
+		sleepDLLImplementation()
+		fmt.Println("sleep execued")
+	}) //这个实现不阻塞 good!!!
+
+	hook.Register(hook.KeyDown, []string{"command", "p"}, func(e hook.Event) {
+		hibernateDLLImplementation()
+		fmt.Println("hibernate execued")
+	})
+
+	hook.Register(hook.KeyDown, []string{"command", "t"}, func(e hook.Event) {
+		timeImplementation()
+		fmt.Println("time execued")
+	})
+
+	hook.Register(hook.KeyDown, []string{"command", "m"}, func(e hook.Event) {
+		timespeakImplementation()
+		fmt.Println("timespeak execued")
+	})
+
+	s := hook.Start()
 	for {
-		//sleep := robotgo.AddEvents("s", "command")
-		//if sleep {
-		//	fmt.Println("sleep")
-		//	//sleepDLLImplementation()
-		//}
-		fmt.Println("keyboard detecing")
-		hook.Register(hook.KeyDown, []string{"command", "s"}, func(e hook.Event) {
-			sleepDLLImplementation()
-			fmt.Println("sleep execued")
-			hook.End()
-		}) //这个实现不阻塞 good!!!
-
-		hook.Register(hook.KeyDown, []string{"command", "p"}, func(e hook.Event) {
-			hibernateDLLImplementation()
-			fmt.Println("hibernate execued")
-			hook.End()
-		})
-
-		hook.Register(hook.KeyDown, []string{"command", "t"}, func(e hook.Event) {
-			timeImplementation()
-			fmt.Println("time execued")
-			hook.End()
-		})
-
-		hook.Register(hook.KeyDown, []string{"command", "m"}, func(e hook.Event) {
-			timespeakImplementation()
-			fmt.Println("timespeak execued")
-			hook.End()
-		})
-
-		s := hook.Start()
 		<-hook.Process(s)
 	}
 }
