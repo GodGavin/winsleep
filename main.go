@@ -69,28 +69,28 @@ func debugprintchan(s chan hook.Event) (out chan hook.Event) {
 			if !ok {
 				break
 			}
-			if e.Rawcode == 91 {
+			if e.Keycode == 3675 {
 				fmt.Println(kindtostrng[e.Kind] + " command")
 			}
-			if e.Rawcode == 162 {
+			if e.Keycode == 29 {
 				fmt.Println(kindtostrng[e.Kind] + " control")
 			}
-			if e.Rawcode == 164 {
+			if e.Keycode == 56 {
 				fmt.Println(kindtostrng[e.Kind] + " alt")
 			}
-			if e.Rawcode == 160 {
+			if e.Keycode == 42 {
 				fmt.Println(kindtostrng[e.Kind] + " shift")
 			}
-			if e.Rawcode == 84 {
+			if e.Keycode == 20 {
 				fmt.Println(kindtostrng[e.Kind] + " t")
 			}
-			if e.Rawcode == 83 {
+			if e.Keycode == 31 {
 				fmt.Println(kindtostrng[e.Kind] + " s")
 			}
-			if e.Rawcode == 80 {
+			if e.Keycode == 25 {
 				fmt.Println(kindtostrng[e.Kind] + " p")
 			}
-			if e.Rawcode == 77 {
+			if e.Keycode == 50 {
 				fmt.Println(kindtostrng[e.Kind] + " m")
 			}
 
