@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"context"
 	_ "embed"
 	"fmt"
 	"github.com/lxn/walk"
@@ -17,7 +18,7 @@ import (
 //go:embed static/favicon.png
 var iconfile []byte
 
-func GuiInit() {
+func GuiInit(ctx context.Context) {
 	mw, err := walk.NewMainWindow()
 	if err != nil {
 		log.Fatal(err)
@@ -32,7 +33,11 @@ func GuiInit() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer ni.Dispose()
+	go func() {
+		defer ni.Dispose()
+		<-ctx.Done()
+	}()
+
 	if err := ni.SetIcon(icon); err != nil {
 		log.Fatal(err)
 	}
@@ -112,8 +117,8 @@ func Timespeak() {
 	SpeakText("你好,世界!")
 }
 
-func SpeakText(text string){
-	ttsdll:=syscall.NewLazyDLL("tts.dll")
-	speak:=ttsdll.NewProc("rapidSpeakText")
+func SpeakText(text string) {
+	ttsdll := syscall.NewLazyDLL("tts.dll")
+	speak := ttsdll.NewProc("rapidSpeakText")
 	speak.Call(uintptr(unsafe.Pointer(syscall.StringToUTF16Ptr(text))))
 }

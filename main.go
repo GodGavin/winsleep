@@ -1,8 +1,11 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	hook "github.com/robotn/gohook"
+	"os"
+	"os/signal"
 	"syscall"
 )
 
@@ -13,10 +16,19 @@ func main() {
 	//#s::;;
 	//	Sleep / Suspend:
 	//	DllCall("PowrProf\SetSuspendState", "int", 0, "int", 0, "int", 0)
-	go GuiInit()
+	ctx, cancel := context.WithCancel(context.Background())
+	go GuiInit(ctx)
 	fmt.Println("hotkeysleep running")
-	deteckeyboard()
+	go deteckeyboard()
 
+	done := make(chan os.Signal)
+	signal.Notify(done, syscall.SIGKILL, syscall.SIGTERM, os.Interrupt)
+	select {
+	case <-done:
+		fmt.Println("exit")
+		hook.End()
+		cancel()
+	}
 	//#p::;;
 	//Hibernate:
 	//	DllCall("PowrProf\SetSuspendState", "int", 1, "int", 0, "int", 0)
