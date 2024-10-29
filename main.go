@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 )
 
 var ch = make(chan int)
@@ -28,6 +29,7 @@ func main() {
 		fmt.Println("exit")
 		hook.End()
 		cancel()
+		time.Sleep(5 * time.Second)
 	}
 	//#p::;;
 	//Hibernate:
